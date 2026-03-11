@@ -304,7 +304,7 @@ export default function SaraMarco() {
           </Accordion>
           <Accordion label="Marco">
             <a href="mailto:marco.conve@hotmail.it">marco.conve@hotmail.it</a>
-            <a href="https://wa.me/393272917349" target="_blank" rel="noreferrer">+39 327 291 7349 · WhatsApp</a>
+            <a href="https://wa.me/393277917349" target="_blank" rel="noreferrer">+39 327 291 7349 · WhatsApp</a>
           </Accordion>
         </div>
       </footer>
