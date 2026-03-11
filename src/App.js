@@ -135,11 +135,14 @@ function Accordion({ label, children }) {
 function PagePlaceholder({ title }) {
   const navigate = useNavigate();
   return (
-    <div className="page-placeholder">
-      <h1>{title}</h1>
-      <p>Pagina in arrivo ♡</p>
-      <button className="page-back" onClick={() => navigate("/")}>← Torna alla home</button>
-    </div>
+    <>
+      <NavBar />
+      <div className="page-placeholder">
+        <h1>{title}</h1>
+        <p>Pagina in arrivo ♡</p>
+        <button className="page-back" onClick={() => navigate("/")}>← Torna alla home</button>
+      </div>
+    </>
   );
 }
 
@@ -195,23 +198,7 @@ function Home() {
 
   return (
     <>
-      <div className={`sm-overlay${menuOpen ? " open" : ""}`}>
-        <button className="sm-menu-close" onClick={closeMenu}>&#x2715;</button>
-        <ul className="sm-menu-nav">
-          {menuItems.map((item, i) => (
-            <li key={i}>
-              <a href={item.href} onClick={e => handleLink(e, item.href)}>{item.label}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <nav className="sm-nav">
-        <span className="sm-nav-logo" onClick={() => navigate("/")}>S & M</span>
-        <button className={`sm-burger${menuOpen ? " open" : ""}`} onClick={menuOpen ? closeMenu : openMenu} aria-label="Menu">
-          <span /><span /><span />
-        </button>
-      </nav>
+      <NavBar />
 
       <section className="sm-hero" id="hero">
         <div className="sm-stripes">
@@ -330,6 +317,32 @@ function Home() {
 }
 
 
+
+function NavBar() {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <div className={`sm-overlay${menuOpen ? " open" : ""}`}>
+        <button className="sm-menu-close" onClick={closeMenu}>&#x2715;</button>
+        <ul className="sm-menu-nav">
+          {menuItems.map((item, i) => (
+            <li key={i}>
+              <a href={item.href} onClick={e => handleLink(e, item.href)}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <nav className="sm-nav">
+        <span className="sm-nav-logo" onClick={() => { closeMenu(); navigate("/"); }}>S & M</span>
+        <button className={`sm-burger${menuOpen ? " open" : ""}`} onClick={menuOpen ? closeMenu : openMenu} aria-label="Menu">
+          <span /><span /><span />
+        </button>
+      </nav>
+    </>
+  );
+}
+
 const rsvpCss = `
   .rsvp-page { min-height:100vh; background:#FFFFFF; padding:120px 48px 80px; display:flex; flex-direction:column; align-items:center; }
   .rsvp-page-title { font-family:'EB Garamond',serif; font-size:clamp(3rem,6vw,5rem); font-weight:700; color:var(--green); margin-bottom:12px; text-align:center; }
@@ -380,8 +393,8 @@ function RSVPPage() {
   return (
     <>
       <style>{rsvpCss}</style>
+      <NavBar />
       <div className="rsvp-page">
-        <button className="rsvp-back" onClick={() => navigate("/")}>← Torna alla home</button>
         <h1 className="rsvp-page-title">RSVP</h1>
         <p className="rsvp-page-sub">Facci sapere se ci sarai — ci teniamo ad averti con noi.</p>
 
