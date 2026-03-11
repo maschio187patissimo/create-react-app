@@ -146,7 +146,7 @@ function PagePlaceholder({ title }) {
 const menuItems = [
   { label: "La nostra storia", href: "/storia" },
   { label: "Programma",        href: "/#programma" },
-  { label: "Soggiorno",        href: "/soggiorno" },
+  { label: "Come arrivarci",   href: "/come-arrivarci" },
   { label: "RSVP",             href: "/rsvp" },
   { label: "Lista nozze",      href: "/lista-nozze" },
   { label: "FAQ",              href: "/faq" },
@@ -270,7 +270,7 @@ function Home() {
                   Vi aspettiamo per una serata a base di panzerotti — iniziamo con il piede giusto e lo stomaco pieno.<br />
                   <span className="sm-tl-desc-em">I panzerotti sono una cosa seria — vestiti comodo!</span>
                 </p>
-                <a className="sm-tl-link" href="/">Come arrivarci →</a>
+                <a className="sm-tl-link" href="/come-arrivarci" onClick={e => { e.preventDefault(); navigate("/come-arrivarci"); }}>Come arrivarci →</a>
               </div>
             </div>
           </div>
@@ -290,7 +290,7 @@ function Home() {
                 <p className="sm-tl-time">Ore 19 : 00</p>
                 <h3 className="sm-tl-event">Ricevimento</h3>
                 <p className="sm-tl-desc">Si mangia, si beve — e con voi il resto viene da sé.</p>
-                <a className="sm-tl-link" href="/">Come raggiungere la location →</a>
+                <a className="sm-tl-link" href="/come-arrivarci" onClick={e => { e.preventDefault(); navigate("/come-arrivarci"); }}>Come raggiungere la location →</a>
               </div>
             </div>
           </div>
@@ -309,7 +309,7 @@ function Home() {
           Che tu venga per i panzerotti, per il matrimonio o per entrambi —<br />
           facci sapere! Ci teniamo ad averti con noi.
         </p>
-        <a className="sm-rsvp-btn" href="mailto:saracecere94@gmail.com">Conferma presenza</a>
+        <button className="sm-rsvp-btn" onClick={() => navigate("/rsvp")}>Conferma presenza</button>
       </section>
 
       <footer className="sm-footer">
@@ -475,7 +475,7 @@ export default function App() {
         <Routes>
           <Route path="/"            element={<Home />} />
           <Route path="/storia"      element={<PagePlaceholder title="La nostra storia" />} />
-          <Route path="/soggiorno"   element={<PagePlaceholder title="Soggiorno" />} />
+          <Route path="/come-arrivarci" element={<PagePlaceholder title="Come arrivarci" />} />
           <Route path="/rsvp"        element={<RSVPPage />} />
           <Route path="/lista-nozze" element={<PagePlaceholder title="Lista Nozze" />} />
           <Route path="/faq"         element={<PagePlaceholder title="FAQ" />} />
