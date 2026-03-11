@@ -19,7 +19,7 @@ const css = `
 
   .sm-overlay { position:fixed; inset:0; z-index:250; background:#FFFFFF; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding:0 10vw; pointer-events:none; opacity:0; transition:opacity .5s cubic-bezier(.77,0,.175,1); }
   .sm-overlay.open { opacity:1; pointer-events:all; }
-  .sm-menu-close { position:absolute; top:24px; right:48px; background:none; border:none; cursor:pointer; font-size:1.4rem; color:var(--ink); transition:color .3s; }
+  .sm-menu-close { position:absolute; top:24px; right:48px; background:none; border:none; cursor:pointer; font-size:2rem; color:var(--ink); transition:color .3s; }
   .sm-menu-close:hover { color:var(--orange); }
   .sm-menu-nav { list-style:none; width:100%; }
   .sm-menu-nav li { overflow:hidden; border-bottom:1px solid rgba(45,90,61,.15); padding:20px 0; }
@@ -329,6 +329,144 @@ function Home() {
   );
 }
 
+
+const rsvpCss = `
+  .rsvp-page { min-height:100vh; background:#FFFFFF; padding:120px 48px 80px; display:flex; flex-direction:column; align-items:center; }
+  .rsvp-page-title { font-family:'EB Garamond',serif; font-size:clamp(3rem,6vw,5rem); font-weight:700; color:var(--green); margin-bottom:12px; text-align:center; }
+  .rsvp-page-sub { font-size:1rem; color:var(--ink-mid); margin-bottom:56px; text-align:center; line-height:2; }
+  .rsvp-form { width:100%; max-width:560px; display:flex; flex-direction:column; gap:36px; }
+  .rsvp-field { display:flex; flex-direction:column; gap:10px; }
+  .rsvp-label { font-size:.65rem; letter-spacing:.25em; text-transform:uppercase; font-family:'Jost',sans-serif; color:var(--ink); font-weight:500; }
+  .rsvp-input { border:none; border-bottom:1px solid rgba(26,20,16,.25); padding:12px 0; font-family:'EB Garamond',serif; font-size:1.1rem; color:var(--ink); background:transparent; outline:none; transition:border-color .3s; }
+  .rsvp-input:focus { border-bottom-color:var(--orange); }
+  .rsvp-options { display:flex; flex-direction:column; gap:12px; }
+  .rsvp-option { display:flex; align-items:center; gap:14px; cursor:pointer; }
+  .rsvp-option input[type="radio"] { display:none; }
+  .rsvp-option-dot { width:18px; height:18px; border-radius:50%; border:1.5px solid rgba(26,20,16,.3); flex-shrink:0; transition:border-color .3s, background .3s; display:flex; align-items:center; justify-content:center; }
+  .rsvp-option input[type="radio"]:checked + .rsvp-option-dot { border-color:var(--orange); background:var(--orange); }
+  .rsvp-option input[type="radio"]:checked + .rsvp-option-dot::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
+  .rsvp-option-label { font-family:'EB Garamond',serif; font-size:1.1rem; color:var(--ink); }
+  .rsvp-submit { align-self:flex-start; background:#EECDE0; color:var(--orange); padding:20px 56px; border:none; cursor:pointer; font-size:1rem; letter-spacing:.18em; text-transform:uppercase; font-weight:900; font-family:'Jost',sans-serif; transition:background .3s, color .3s; -webkit-text-stroke:.5px var(--orange); margin-top:8px; }
+  .rsvp-submit:hover { background:var(--orange); color:#EECDE0; -webkit-text-stroke:.5px #EECDE0; }
+  .rsvp-success { text-align:center; font-family:'EB Garamond',serif; font-size:1.8rem; color:var(--green); margin-top:48px; }
+  .rsvp-back { font-family:'Jost',sans-serif; font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:var(--orange); background:none; border:none; cursor:pointer; margin-bottom:40px; align-self:flex-start; }
+  .rsvp-toggle-wrap { display:flex; align-items:center; justify-content:space-between; padding:4px 0; }
+  .rsvp-toggle-text { font-family:'EB Garamond',serif; font-size:1.1rem; color:var(--ink); }
+  .rsvp-toggle { position:relative; width:48px; height:26px; flex-shrink:0; }
+  .rsvp-toggle input { opacity:0; width:0; height:0; }
+  .rsvp-toggle-slider { position:absolute; inset:0; background:rgba(26,20,16,.15); border-radius:26px; cursor:pointer; transition:background .3s; }
+  .rsvp-toggle-slider::before { content:''; position:absolute; width:20px; height:20px; left:3px; top:3px; background:#fff; border-radius:50%; transition:transform .3s; }
+  .rsvp-toggle input:checked + .rsvp-toggle-slider { background:var(--orange); }
+  .rsvp-toggle input:checked + .rsvp-toggle-slider::before { transform:translateX(22px); }
+  @media(max-width:768px) { .rsvp-page { padding:100px 24px 60px; } }
+`;
+
+function RSVPPage() {
+  const navigate = useNavigate();
+  const [nome, setNome] = useState("");
+  const [partecipa, setPartecipa] = useState("");
+  const [allergie, setAllergie] = useState("");
+  const [pernotto, setPernotto] = useState("");
+  const [inviato, setInviato] = useState(false);
+  const [bambini, setBambini] = useState(false);
+
+  const mostraPernotto = partecipa === "entrambi" || partecipa === "solo_matrimonio";
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setInviato(true);
+  };
+
+  return (
+    <>
+      <style>{rsvpCss}</style>
+      <div className="rsvp-page">
+        <button className="rsvp-back" onClick={() => navigate("/")}>← Torna alla home</button>
+        <h1 className="rsvp-page-title">RSVP</h1>
+        <p className="rsvp-page-sub">Facci sapere se ci sarai — ci teniamo ad averti con noi.</p>
+
+        {inviato ? (
+          <div className="rsvp-success">Grazie! Non vediamo l'ora di festeggiare con te ♡</div>
+        ) : (
+          <form className="rsvp-form" onSubmit={handleSubmit}>
+
+            <div className="rsvp-field">
+              <label className="rsvp-label">Nome e Cognome</label>
+              <input
+                className="rsvp-input"
+                type="text"
+                placeholder="Il tuo nome..."
+                value={nome}
+                onChange={e => setNome(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="rsvp-field">
+              <label className="rsvp-label">Parteciperai?</label>
+              <div className="rsvp-options">
+                {[
+                  { value: "solo_matrimonio", label: "Sì, solo il giorno del matrimonio" },
+                  { value: "entrambi",        label: "Sì, entrambi i giorni" },
+                  { value: "no",              label: "No, mi dispiace" },
+                ].map(opt => (
+                  <label className="rsvp-option" key={opt.value}>
+                    <input type="radio" name="partecipa" value={opt.value} checked={partecipa === opt.value} onChange={e => setPartecipa(e.target.value)} required />
+                    <span className="rsvp-option-dot"></span>
+                    <span className="rsvp-option-label">{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="rsvp-field">
+              <label className="rsvp-label">Allergie, intolleranze o diete particolari?</label>
+              <input
+                className="rsvp-input"
+                type="text"
+                placeholder="Se non hai nessuna esigenza lascia pure vuoto..."
+                value={allergie}
+                onChange={e => setAllergie(e.target.value)}
+              />
+            </div>
+
+            <div className="rsvp-field">
+              <label className="rsvp-label">Verranno bambini con te?</label>
+              <div className="rsvp-toggle-wrap">
+                <span className="rsvp-toggle-text">{bambini ? "Sì, ci saranno bambini" : "No, solo adulti"}</span>
+                <label className="rsvp-toggle">
+                  <input type="checkbox" checked={bambini} onChange={e => setBambini(e.target.checked)} />
+                  <span className="rsvp-toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            {mostraPernotto && (
+              <div className="rsvp-field">
+                <label className="rsvp-label">Avrai bisogno di pernottare in masseria la sera del matrimonio?</label>
+                <div className="rsvp-options">
+                  {[
+                    { value: "si", label: "Sì, mi farebbe piacere" },
+                    { value: "no", label: "No, grazie" },
+                  ].map(opt => (
+                    <label className="rsvp-option" key={opt.value}>
+                      <input type="radio" name="pernotto" value={opt.value} checked={pernotto === opt.value} onChange={e => setPernotto(e.target.value)} />
+                      <span className="rsvp-option-dot"></span>
+                      <span className="rsvp-option-label">{opt.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button className="rsvp-submit" type="submit">Invia</button>
+          </form>
+        )}
+      </div>
+    </>
+  );
+}
+
 export default function App() {
   return (
     <>
@@ -338,7 +476,7 @@ export default function App() {
           <Route path="/"            element={<Home />} />
           <Route path="/storia"      element={<PagePlaceholder title="La nostra storia" />} />
           <Route path="/soggiorno"   element={<PagePlaceholder title="Soggiorno" />} />
-          <Route path="/rsvp"        element={<PagePlaceholder title="RSVP" />} />
+          <Route path="/rsvp"        element={<RSVPPage />} />
           <Route path="/lista-nozze" element={<PagePlaceholder title="Lista Nozze" />} />
           <Route path="/faq"         element={<PagePlaceholder title="FAQ" />} />
         </Routes>
