@@ -190,7 +190,7 @@ export default function SaraMarco() {
       </div>
 
       <nav className="sm-nav">
-        <a className="sm-nav-logo" href="#">S & M</a>
+        <a className="sm-nav-logo" href="/">S & M</a>
         <button className={`sm-burger${menuOpen ? " open" : ""}`} onClick={menuOpen ? closeMenu : openMenu} aria-label="Menu">
           <span /><span /><span />
         </button>
@@ -253,7 +253,7 @@ export default function SaraMarco() {
                   Vi aspettiamo per una serata a base di panzerotti — iniziamo con il piede giusto e lo stomaco pieno.<br />
                   <span className="sm-tl-desc-em">I panzerotti sono una cosa seria — vestiti comodo!</span>
                 </p>
-                <a className="sm-tl-link" href="#">Come arrivarci →</a>
+                <a className="sm-tl-link" href="/">Come arrivarci →</a>
               </div>
             </div>
           </div>
@@ -273,7 +273,7 @@ export default function SaraMarco() {
                 <p className="sm-tl-time">Ore 19 : 00</p>
                 <h3 className="sm-tl-event">Ricevimento</h3>
                 <p className="sm-tl-desc">Si mangia, si beve — e con voi il resto viene da sé.</p>
-                <a className="sm-tl-link" href="#">Come raggiungere la location →</a>
+                <a className="sm-tl-link" href="/">Come raggiungere la location →</a>
               </div>
             </div>
           </div>
