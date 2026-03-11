@@ -375,7 +375,6 @@ const rsvpCss = `
 `;
 
 function RSVPPage() {
-  const navigate = useNavigate();
   const [nome, setNome] = useState("");
   const [partecipa, setPartecipa] = useState("");
   const [allergie, setAllergie] = useState("");
