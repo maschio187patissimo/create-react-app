@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400;700;900&display=swap');
@@ -6,11 +7,10 @@ const css = `
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; }
   body { background:#FFFFFF; color:#1A1410; font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
-
   :root { --yellow:#FDF8DC; --orange:#E8622A; --stripe:#EECDE0; --green:#1B4D2E; --ink:#1A1410; --ink-mid:#3A3530; }
 
   .sm-nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; justify-content:space-between; align-items:center; padding:20px 48px; background:rgba(255,255,255,.97); backdrop-filter:blur(12px); box-shadow:0 1px 0 rgba(232,98,42,.15); }
-  .sm-nav-logo { font-family:'EB Garamond',serif; font-size:1rem; font-weight:400; letter-spacing:.4em; color:var(--ink); text-transform:uppercase; text-decoration:none; }
+  .sm-nav-logo { font-family:'EB Garamond',serif; font-size:1rem; font-weight:400; letter-spacing:.4em; color:var(--ink); text-transform:uppercase; text-decoration:none; cursor:pointer; }
   .sm-burger { width:36px; height:20px; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; background:none; border:none; padding:0; }
   .sm-burger span { display:block; width:100%; height:1px; background:var(--ink); transition:transform .5s cubic-bezier(.77,0,.175,1), opacity .4s, width .4s; transform-origin:center; }
   .sm-burger.open span:nth-child(1) { transform:translateY(9.5px) rotate(45deg); }
@@ -24,7 +24,7 @@ const css = `
   .sm-menu-nav { list-style:none; width:100%; }
   .sm-menu-nav li { overflow:hidden; border-bottom:1px solid rgba(45,90,61,.15); padding:20px 0; }
   .sm-menu-nav li:first-child { border-top:1px solid rgba(45,90,61,.15); }
-  .sm-menu-nav a { font-family:'Jost',sans-serif; font-size:1.05rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); text-decoration:none; display:block; transform:translateY(30px); transition:transform .5s cubic-bezier(.77,0,.175,1), color .3s; }
+  .sm-menu-nav a { font-family:'Jost',sans-serif; font-size:1.05rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); text-decoration:none; display:block; transform:translateY(30px); transition:transform .5s cubic-bezier(.77,0,.175,1), color .3s; cursor:pointer; }
   .sm-overlay.open .sm-menu-nav a { transform:translateY(0); }
   .sm-menu-nav li:nth-child(1) a { transition-delay:.05s; }
   .sm-menu-nav li:nth-child(2) a { transition-delay:.10s; }
@@ -41,9 +41,9 @@ const css = `
   .sm-stripe:nth-child(even) { background:var(--stripe); }
   .sm-hero-text { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; z-index:2; pointer-events:none; padding:0 3vw; margin-top:-10vh; }
   .sm-hero-row { display:flex; align-items:baseline; line-height:.88; }
-  .sm-hl { font-family:'EB Garamond',serif; font-weight:700; color:var(--orange); font-size:clamp(14vw,19vw,19vw); display:inline-block; line-height:.88; letter-spacing:.01em; }
+  .sm-hl { font-family:'EB Garamond',serif; font-weight:700; color:var(--orange); font-size:clamp(14vw,19vw,23vw); display:inline-block; line-height:.88; letter-spacing:.01em; }
   .sm-hl-S{transform:translateY(4%)} .sm-hl-A1{transform:translateY(-3%)} .sm-hl-R1{transform:translateY(5%)} .sm-hl-A2{transform:translateY(-2%)}
-  .sm-hl-amp { font-family:'EB Garamond',serif; font-weight:700; color:var(--orange); font-size:clamp(14vw,19vw,19vw); display:inline-block; line-height:.88; transform:translateY(4%); }
+  .sm-hl-amp { font-family:'EB Garamond',serif; font-weight:700; color:var(--orange); font-size:clamp(14vw,19vw,23vw); display:inline-block; line-height:.88; transform:translateY(4%); }
   .sm-hl-M{transform:translateY(4%)} .sm-hl-A3{transform:translateY(-4%)} .sm-hl-R2{transform:translateY(5%)} .sm-hl-C{transform:translateY(-3%)} .sm-hl-O{transform:translateY(4%)}
   .sm-hero-scroll { position:absolute; bottom:32px; right:48px; display:flex; flex-direction:column; align-items:center; gap:8px; font-size:.52rem; letter-spacing:.28em; text-transform:uppercase; color:var(--orange); }
   .sm-scroll-bar { width:1px; height:36px; background:var(--orange); }
@@ -97,6 +97,11 @@ const css = `
   .sm-acc-content a { display:block; font-family:'EB Garamond',serif; font-size:1rem; color:rgba(255,255,255,.8); text-decoration:none; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.08); }
   .sm-acc-content a:last-child { border-bottom:none; }
 
+  .page-placeholder { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'EB Garamond',serif; gap:24px; }
+  .page-placeholder h1 { font-size:3rem; color:var(--green); font-weight:700; }
+  .page-placeholder p { font-size:1.2rem; color:var(--ink-mid); }
+  .page-back { font-family:'Jost',sans-serif; font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; color:var(--orange); text-decoration:none; cursor:pointer; background:none; border:none; margin-top:16px; }
+
   @media (max-width:768px) {
     .sm-nav { padding:16px 24px; }
     .sm-menu-close { right:24px; }
@@ -127,29 +132,43 @@ function Accordion({ label, children }) {
   );
 }
 
+function PagePlaceholder({ title }) {
+  const navigate = useNavigate();
+  return (
+    <div className="page-placeholder">
+      <h1>{title}</h1>
+      <p>Pagina in arrivo ♡</p>
+      <button className="page-back" onClick={() => navigate("/")}>← Torna alla home</button>
+    </div>
+  );
+}
+
 const menuItems = [
-  { label: "La nostra storia", href: "#storia" },
-  { label: "Programma",        href: "#programma" },
-  { label: "Soggiorno",        href: "#" },
-  { label: "RSVP",             href: "#rsvp" },
-  { label: "Lista nozze",      href: "#" },
-  { label: "FAQ",              href: "#" },
+  { label: "La nostra storia", href: "/storia" },
+  { label: "Programma",        href: "/#programma" },
+  { label: "Soggiorno",        href: "/soggiorno" },
+  { label: "RSVP",             href: "/rsvp" },
+  { label: "Lista nozze",      href: "/lista-nozze" },
+  { label: "FAQ",              href: "/faq" },
 ];
 
-export default function SaraMarco() {
+function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const openMenu  = () => { setMenuOpen(true);  document.body.style.overflow = "hidden"; };
   const closeMenu = () => { setMenuOpen(false); document.body.style.overflow = ""; };
 
   const handleLink = (e, href) => {
+    e.preventDefault();
     closeMenu();
-    if (href !== "#") {
-      e.preventDefault();
+    if (href === "/#programma") {
       setTimeout(() => {
-        const el = document.querySelector(href);
+        const el = document.querySelector("#programma");
         if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 50);
+      }, 100);
+    } else {
+      navigate(href);
     }
   };
 
@@ -176,8 +195,6 @@ export default function SaraMarco() {
 
   return (
     <>
-      <style>{css}</style>
-
       <div className={`sm-overlay${menuOpen ? " open" : ""}`}>
         <button className="sm-menu-close" onClick={closeMenu}>&#x2715;</button>
         <ul className="sm-menu-nav">
@@ -190,7 +207,7 @@ export default function SaraMarco() {
       </div>
 
       <nav className="sm-nav">
-        <a className="sm-nav-logo" href="/">S & M</a>
+        <span className="sm-nav-logo" onClick={() => navigate("/")}>S & M</span>
         <button className={`sm-burger${menuOpen ? " open" : ""}`} onClick={menuOpen ? closeMenu : openMenu} aria-label="Menu">
           <span /><span /><span />
         </button>
@@ -304,10 +321,28 @@ export default function SaraMarco() {
           </Accordion>
           <Accordion label="Marco">
             <a href="mailto:marco.conve@hotmail.it">marco.conve@hotmail.it</a>
-            <a href="https://wa.me/393277917349" target="_blank" rel="noreferrer">+39 327 291 7349 · WhatsApp</a>
+            <a href="https://wa.me/393272917349" target="_blank" rel="noreferrer">+39 327 291 7349 · WhatsApp</a>
           </Accordion>
         </div>
       </footer>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <>
+      <style>{css}</style>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/"            element={<Home />} />
+          <Route path="/storia"      element={<PagePlaceholder title="La nostra storia" />} />
+          <Route path="/soggiorno"   element={<PagePlaceholder title="Soggiorno" />} />
+          <Route path="/rsvp"        element={<PagePlaceholder title="RSVP" />} />
+          <Route path="/lista-nozze" element={<PagePlaceholder title="Lista Nozze" />} />
+          <Route path="/faq"         element={<PagePlaceholder title="FAQ" />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
