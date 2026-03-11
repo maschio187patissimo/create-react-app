@@ -9,7 +9,7 @@ const css = `
   body { background:#FFFFFF; color:#1A1410; font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
   :root { --yellow:#FDF8DC; --orange:#E8622A; --stripe:#EECDE0; --green:#1B4D2E; --ink:#1A1410; --ink-mid:#3A3530; }
 
-  .sm-nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; justify-content:space-between; align-items:center; padding:20px 48px; background:rgba(255,255,255,.97); backdrop-filter:blur(12px); box-shadow:0 1px 0 rgba(232,98,42,.15); }
+  .sm-nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; justify-content:space-between; align-items:center; padding:20px 48px; height:64px; background:rgba(255,255,255,.97); backdrop-filter:blur(12px); box-shadow:0 1px 0 rgba(232,98,42,.15); }
   .sm-nav-logo { font-family:'EB Garamond',serif; font-size:1rem; font-weight:400; letter-spacing:.4em; color:var(--ink); text-transform:uppercase; text-decoration:none; cursor:pointer; }
   .sm-burger { width:36px; height:20px; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; background:none; border:none; padding:0; }
   .sm-burger span { display:block; width:100%; height:1px; background:var(--ink); transition:transform .5s cubic-bezier(.77,0,.175,1), opacity .4s, width .4s; transform-origin:center; }
@@ -19,7 +19,7 @@ const css = `
 
   .sm-overlay { position:fixed; inset:0; z-index:250; background:#FFFFFF; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding:0 10vw; pointer-events:none; opacity:0; transition:opacity .5s cubic-bezier(.77,0,.175,1); }
   .sm-overlay.open { opacity:1; pointer-events:all; }
-  .sm-menu-close { position:absolute; top:24px; right:48px; background:none; border:none; cursor:pointer; font-size:2rem; color:var(--ink); transition:color .3s; }
+  .sm-menu-close { position:absolute; top:0; right:48px; height:64px; display:flex; align-items:center; background:none; border:none; cursor:pointer; font-size:2rem; color:var(--ink); transition:color .3s; line-height:1; padding:0; }
   .sm-menu-close:hover { color:var(--orange); }
   .sm-menu-nav { list-style:none; width:100%; }
   .sm-menu-nav li { overflow:hidden; border-bottom:1px solid rgba(45,90,61,.15); padding:20px 0; }
