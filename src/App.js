@@ -155,7 +155,8 @@ const menuItems = [
   { label: "FAQ",              href: "/faq" },
 ];
 
-function Home() {
+
+function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -166,6 +167,7 @@ function Home() {
     e.preventDefault();
     closeMenu();
     if (href === "/#programma") {
+      navigate("/");
       setTimeout(() => {
         const el = document.querySelector("#programma");
         if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -174,6 +176,31 @@ function Home() {
       navigate(href);
     }
   };
+
+  return (
+    <>
+      <div className={`sm-overlay${menuOpen ? " open" : ""}`}>
+        <button className="sm-menu-close" onClick={closeMenu}>&#x2715;</button>
+        <ul className="sm-menu-nav">
+          {menuItems.map((item, i) => (
+            <li key={i}>
+              <a href={item.href} onClick={e => handleLink(e, item.href)}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <nav className="sm-nav">
+        <span className="sm-nav-logo" onClick={() => { closeMenu(); navigate("/"); }}>S & M</span>
+        <button className={`sm-burger${menuOpen ? " open" : ""}`} onClick={menuOpen ? closeMenu : openMenu} aria-label="Menu">
+          <span /><span /><span />
+        </button>
+      </nav>
+    </>
+  );
+}
+
+function Home() {
+  const navigate = useNavigate();
 
   useEffect(() => {
     const targets = document.querySelectorAll('.sm-tl-title, .sm-tl-day, .sm-tl-item');
@@ -312,33 +339,6 @@ function Home() {
           </Accordion>
         </div>
       </footer>
-    </>
-  );
-}
-
-
-
-function NavBar() {
-  const navigate = useNavigate();
-
-  return (
-    <>
-      <div className={`sm-overlay${menuOpen ? " open" : ""}`}>
-        <button className="sm-menu-close" onClick={closeMenu}>&#x2715;</button>
-        <ul className="sm-menu-nav">
-          {menuItems.map((item, i) => (
-            <li key={i}>
-              <a href={item.href} onClick={e => handleLink(e, item.href)}>{item.label}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <nav className="sm-nav">
-        <span className="sm-nav-logo" onClick={() => { closeMenu(); navigate("/"); }}>S & M</span>
-        <button className={`sm-burger${menuOpen ? " open" : ""}`} onClick={menuOpen ? closeMenu : openMenu} aria-label="Menu">
-          <span /><span /><span />
-        </button>
-      </nav>
     </>
   );
 }
