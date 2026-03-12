@@ -569,6 +569,84 @@ function PanzerottiQuote() {
   );
 }
 
+function SaraIncazza() {
+  const [open, setOpen] = useState(false);
+  return (
+    <span style={{position:'relative', display:'inline-block', verticalAlign:'middle', margin:'0 4px'}}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          background:'var(--stripe)',
+          border:'2.5px solid var(--ink)',
+          borderRadius:'12px',
+          padding:'3px 12px',
+          fontFamily:"'EB Garamond', serif",
+          fontStyle:'italic',
+          fontSize:'1rem',
+          color:'var(--ink)',
+          cursor:'pointer',
+          boxShadow:'2px 2px 0 var(--ink)',
+          transition:'transform .15s, box-shadow .15s',
+          display:'inline-block',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform='translate(-1px,-1px)'; e.currentTarget.style.boxShadow='4px 4px 0 var(--ink)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='2px 2px 0 var(--ink)'; }}
+      >
+        Sara si incazza 😤
+      </button>
+      {open && (
+        <span style={{
+          position:'absolute',
+          top:'calc(100% + 14px)',
+          left:'50%',
+          transform:'translateX(-50%)',
+          zIndex:10,
+          display:'block',
+        }}>
+          <span style={{
+            display:'block', width:0, height:0,
+            borderLeft:'8px solid transparent',
+            borderRight:'8px solid transparent',
+            borderBottom:'14px solid var(--ink)',
+            margin:'0 auto',
+          }} />
+          <span style={{
+            display:'block', width:0, height:0,
+            borderLeft:'6px solid transparent',
+            borderRight:'6px solid transparent',
+            borderBottom:'12px solid #fff',
+            margin:'-12px auto 0',
+          }} />
+          <span style={{
+            display:'block',
+            background:'#fff',
+            border:'2.5px solid var(--ink)',
+            borderRadius:'12px',
+            padding:'10px',
+            boxShadow:'4px 4px 0 var(--ink)',
+            width:'220px',
+          }}>
+            <img
+              src="/sara.jpeg"
+              alt="Sara"
+              style={{width:'100%', borderRadius:'6px', display:'block'}}
+            />
+            <span style={{
+              display:'block', marginTop:'8px',
+              fontSize:'.55rem', letterSpacing:'.15em',
+              textTransform:'uppercase', color:'var(--orange)',
+              fontFamily:"'Jost', sans-serif", textAlign:'center',
+              cursor:'pointer',
+            }} onClick={() => setOpen(false)}>
+              chiudi ✕
+            </span>
+          </span>
+        </span>
+      )}
+    </span>
+  );
+}
+
 function PageArrivarci({ onNav }) {
   return (
     <div className="arrivarci-page">
@@ -591,6 +669,9 @@ function PageArrivarci({ onNav }) {
           <h1 className="arrivarci-title">Matrimonio</h1>
           <p className="arrivarci-location">Masseria Don Luigi</p>
           <p className="arrivarci-address">Contrada Coccaro s.n.<br />Fasano, Brindisi</p>
+          <p style={{fontSize:'1rem', lineHeight:1.9, color:'var(--ink-mid)', margin:'20px 0 0'}}>
+            La masseria è semplice da raggiungere. Se ti perdi chiamaci....e non fare tardi che <SaraIncazza />.
+          </p>
         </div>
       </div>
       <div style={{textAlign:'center', padding:'48px 0 64px'}}>
