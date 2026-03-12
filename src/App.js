@@ -418,7 +418,6 @@ function ParcheggiStrada() {
           }}>
             {/* Placeholder foto */}
             <span style={{
-              display:'block',
               width:'100%',
               aspectRatio:'4/3',
               background:'var(--yellow)',
