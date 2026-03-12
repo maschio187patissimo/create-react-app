@@ -582,7 +582,6 @@ function PageArrivarci({ onNav }) {
           <p style={{fontSize:'1rem', lineHeight:1.9, color:'var(--ink-mid)', margin:'20px 0 0'}}>
             Ci sono due parcheggi. Per il primo ti basta seguire le indicazioni al link qui sopra su Via Locorotondo. È piccolo e con posti limitati. Il secondo parcheggio è più spazioso e capiente. Segui <a href="https://google.com/maps/place/40°44'43.2%22N+17°24'59.3%22E/@40.7452082,17.4163824,53m/data=!3m1!1e3!4m4!3m3!8m2!3d40.745342!4d17.416472?entry=ttu&g_ep=EgoyMDI2MDMxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" style={{color:'var(--orange)', textDecoration:'underline', textUnderlineOffset:'3px'}}>questo link</a> per arrivarci. Una volta parcheggiato ti basta scendere a piedi <ParcheggiStrada />.
           </p>
-          <a className="arrivarci-maps" href="https://maps.google.com/?q=Via+Locorotondo+142+Cisternino+Brindisi" target="_blank" rel="noreferrer">Apri in Google Maps →</a>
           <div className="arrivarci-map">
             <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=Via+Locorotondo+142,Cisternino,Brindisi" allowFullScreen loading="lazy" title="Mappa Panzerottata" />
           </div>
@@ -595,7 +594,6 @@ function PageArrivarci({ onNav }) {
           <h1 className="arrivarci-title">Matrimonio</h1>
           <p className="arrivarci-location">Masseria Don Luigi</p>
           <p className="arrivarci-address">Contrada Coccaro s.n.<br />Fasano, Brindisi</p>
-          <a className="arrivarci-maps" href="https://maps.google.com/?q=Contrada+Coccaro+Fasano+Brindisi" target="_blank" rel="noreferrer">Apri in Google Maps →</a>
           <div className="arrivarci-map">
             <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=Contrada+Coccaro,Fasano,Brindisi" allowFullScreen loading="lazy" title="Mappa Matrimonio" />
           </div>
