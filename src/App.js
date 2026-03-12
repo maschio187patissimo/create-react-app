@@ -363,7 +363,16 @@ function PageArrivarci({ onNav }) {
         <div className="arrivarci-inner">
           <p className="arrivarci-label">Sabato · 19 Luglio</p>
           <h1 className="arrivarci-title">Panzerottata</h1>
-          <p className="arrivarci-quote">"Come li farebbe la Signora Nunzia, ma con ancora più amore e autenticità."</p>
+          <p className="arrivarci-quote">"I panzerotti vanno mangiati caldi..."</p>
+          <div style={{margin:'24px 0', width:'100%', maxWidth:'400px', aspectRatio:'9/16', borderRadius:'8px', overflow:'hidden'}}>
+            <iframe
+              src="https://www.youtube.com/embed/wVEDgrPbEKQ"
+              title="Panzerotti video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{width:'100%', height:'100%', border:0}}
+            />
+          </div>
           <p className="arrivarci-location">Casa della sposa</p>
           <p className="arrivarci-address">Via Locorotondo 142<br />Cisternino, Brindisi</p>
           <a className="arrivarci-maps" href="https://maps.google.com/?q=Via+Locorotondo+142+Cisternino+Brindisi" target="_blank" rel="noreferrer">Apri in Google Maps →</a>
