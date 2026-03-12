@@ -364,7 +364,7 @@ function PageArrivarci({ onNav }) {
           <p className="arrivarci-label">Sabato · 19 Luglio</p>
           <h1 className="arrivarci-title">Panzerottata</h1>
           <p className="arrivarci-quote">"I panzerotti vanno mangiati caldi..."</p>
-          <div style={{margin:'24px 0', width:'100%', maxWidth:'400px', aspectRatio:'9/16', borderRadius:'8px', overflow:'hidden'}}>
+          <div style={{margin:'24px 0', width:'100%', maxWidth:'200px', aspectRatio:'9/16', borderRadius:'8px', overflow:'hidden'}}>
             <iframe
               src="https://www.youtube.com/embed/wVEDgrPbEKQ"
               title="Panzerotti video"
