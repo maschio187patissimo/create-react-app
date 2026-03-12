@@ -356,6 +356,118 @@ function PageHome({ onNav }) {
   );
 }
 
+function PanzerottiQuote() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{position:'relative', margin:'24px 0 32px', display:'inline-block'}}>
+      {/* Fumetto */}
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          position:'relative',
+          background:'var(--yellow)',
+          border:'2.5px solid var(--ink)',
+          borderRadius:'18px',
+          padding:'14px 22px',
+          fontFamily:"'EB Garamond', serif",
+          fontStyle:'italic',
+          fontSize:'1.1rem',
+          color:'var(--ink)',
+          cursor:'pointer',
+          boxShadow:'3px 3px 0 var(--ink)',
+          transition:'transform .15s, box-shadow .15s',
+          display:'block',
+          textAlign:'left',
+          maxWidth:'320px',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform='translate(-2px,-2px)'; e.currentTarget.style.boxShadow='5px 5px 0 var(--ink)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='3px 3px 0 var(--ink)'; }}
+      >
+        "I panzerotti vanno mangiati caldi..."
+        {/* Codina del fumetto */}
+        <span style={{
+          position:'absolute',
+          bottom:'-14px',
+          left:'28px',
+          width:0,
+          height:0,
+          borderLeft:'10px solid transparent',
+          borderRight:'6px solid transparent',
+          borderTop:'14px solid var(--ink)',
+        }} />
+        <span style={{
+          position:'absolute',
+          bottom:'-11px',
+          left:'30px',
+          width:0,
+          height:0,
+          borderLeft:'8px solid transparent',
+          borderRight:'5px solid transparent',
+          borderTop:'12px solid var(--yellow)',
+        }} />
+        {/* Hint click */}
+        <span style={{
+          display:'block',
+          marginTop:'6px',
+          fontSize:'.55rem',
+          letterSpacing:'.18em',
+          textTransform:'uppercase',
+          color:'var(--orange)',
+          fontStyle:'normal',
+          fontFamily:"'Jost', sans-serif",
+        }}>
+          {open ? 'chiudi ↑' : 'guarda il video ↓'}
+        </span>
+      </button>
+
+      {/* Video in stile fumetto */}
+      {open && (
+        <div style={{
+          position:'relative',
+          marginTop:'20px',
+          background:'#fff',
+          border:'2.5px solid var(--ink)',
+          borderRadius:'12px',
+          padding:'10px',
+          boxShadow:'4px 4px 0 var(--ink)',
+          width:'220px',
+        }}>
+          {/* Angolino fumetto in alto */}
+          <span style={{
+            position:'absolute',
+            top:'-14px',
+            left:'32px',
+            width:0,
+            height:0,
+            borderLeft:'8px solid transparent',
+            borderRight:'8px solid transparent',
+            borderBottom:'14px solid var(--ink)',
+          }} />
+          <span style={{
+            position:'absolute',
+            top:'-11px',
+            left:'34px',
+            width:0,
+            height:0,
+            borderLeft:'6px solid transparent',
+            borderRight:'6px solid transparent',
+            borderBottom:'12px solid #fff',
+          }} />
+          <div style={{aspectRatio:'9/16', borderRadius:'6px', overflow:'hidden', border:'1.5px solid rgba(0,0,0,.1)'}}>
+            <iframe
+              src="https://www.youtube.com/embed/wVEDgrPbEKQ?autoplay=1"
+              title="Panzerotti video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{width:'100%', height:'100%', border:0, display:'block'}}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PageArrivarci({ onNav }) {
   return (
     <div className="arrivarci-page">
@@ -363,16 +475,7 @@ function PageArrivarci({ onNav }) {
         <div className="arrivarci-inner">
           <p className="arrivarci-label">Sabato · 19 Luglio</p>
           <h1 className="arrivarci-title">Panzerottata</h1>
-          <p className="arrivarci-quote">"I panzerotti vanno mangiati caldi..."</p>
-          <div style={{margin:'24px 0', width:'100%', maxWidth:'200px', aspectRatio:'9/16', borderRadius:'8px', overflow:'hidden'}}>
-            <iframe
-              src="https://www.youtube.com/embed/wVEDgrPbEKQ"
-              title="Panzerotti video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              style={{width:'100%', height:'100%', border:0}}
-            />
-          </div>
+          <PanzerottiQuote />
           <p className="arrivarci-location">Casa della sposa</p>
           <p className="arrivarci-address">Via Locorotondo 142<br />Cisternino, Brindisi</p>
           <a className="arrivarci-maps" href="https://maps.google.com/?q=Via+Locorotondo+142+Cisternino+Brindisi" target="_blank" rel="noreferrer">Apri in Google Maps →</a>
