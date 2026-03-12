@@ -484,7 +484,7 @@ function PanzerottiQuote() {
         onMouseEnter={e => { e.currentTarget.style.transform='translate(-2px,-2px)'; e.currentTarget.style.boxShadow='5px 5px 0 var(--ink)'; }}
         onMouseLeave={e => { e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='3px 3px 0 var(--ink)'; }}
       >
-        "I panzerotti vanno mangiati caldi..."
+        "I panzerotti vanno mangiati caldi...non fatevi pregare"
         {/* Codina del fumetto */}
         <span style={{
           position:'absolute',
