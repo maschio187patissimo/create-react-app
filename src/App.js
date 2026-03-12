@@ -668,7 +668,7 @@ function PageArrivarci({ onNav }) {
           <p className="arrivarci-label">Domenica · 20 Luglio</p>
           <h1 className="arrivarci-title">Matrimonio</h1>
           <p className="arrivarci-location">Masseria Don Luigi</p>
-          <p className="arrivarci-address">Contrada Coccaro s.n.<br />Fasano, Brindisi</p>
+          <a className="arrivarci-address" href="https://google.com/maps/place/masseria+don+luigi/data=!4m2!3m1!1s0x13464bd3838aeee5:0x975ba61dde7ddb11?sa=X&ved=1t:242&ictx=111" target="_blank" rel="noreferrer" style={{color:'var(--ink)', textDecoration:'underline', textUnderlineOffset:'3px'}}>Contrada Coccaro s.n.<br />Fasano, Brindisi</a>
           <p style={{fontSize:'1rem', lineHeight:1.9, color:'var(--ink-mid)', margin:'20px 0 0'}}>
             La masseria è semplice da raggiungere. Se ti perdi chiamaci....e non fare tardi che <SaraIncazza />.
           </p>
