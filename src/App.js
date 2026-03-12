@@ -356,6 +356,108 @@ function PageHome({ onNav }) {
   );
 }
 
+function ParcheggiStrada() {
+  const [open, setOpen] = useState(false);
+  return (
+    <span style={{position:'relative', display:'inline-block', verticalAlign:'middle', margin:'0 4px'}}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          background:'var(--stripe)',
+          border:'2.5px solid var(--ink)',
+          borderRadius:'12px',
+          padding:'3px 12px',
+          fontFamily:"'EB Garamond', serif",
+          fontStyle:'italic',
+          fontSize:'1rem',
+          color:'var(--ink)',
+          cursor:'pointer',
+          boxShadow:'2px 2px 0 var(--ink)',
+          transition:'transform .15s, box-shadow .15s',
+          display:'inline-block',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform='translate(-1px,-1px)'; e.currentTarget.style.boxShadow='4px 4px 0 var(--ink)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='2px 2px 0 var(--ink)'; }}
+      >
+        lungo questa strada 📸
+      </button>
+      {open && (
+        <span style={{
+          position:'absolute',
+          top:'calc(100% + 14px)',
+          left:'50%',
+          transform:'translateX(-50%)',
+          zIndex:10,
+          display:'block',
+        }}>
+          {/* Punta fumetto */}
+          <span style={{
+            display:'block',
+            width:0, height:0,
+            borderLeft:'8px solid transparent',
+            borderRight:'8px solid transparent',
+            borderBottom:'14px solid var(--ink)',
+            margin:'0 auto',
+          }} />
+          <span style={{
+            display:'block',
+            width:0, height:0,
+            borderLeft:'6px solid transparent',
+            borderRight:'6px solid transparent',
+            borderBottom:'12px solid #fff',
+            margin:'-12px auto 0',
+          }} />
+          <span style={{
+            display:'block',
+            background:'#fff',
+            border:'2.5px solid var(--ink)',
+            borderRadius:'12px',
+            padding:'10px',
+            boxShadow:'4px 4px 0 var(--ink)',
+            width:'240px',
+          }}>
+            {/* Placeholder foto */}
+            <span style={{
+              display:'block',
+              width:'100%',
+              aspectRatio:'4/3',
+              background:'var(--yellow)',
+              borderRadius:'6px',
+              border:'1.5px solid rgba(0,0,0,.1)',
+              display:'flex',
+              alignItems:'center',
+              justifyContent:'center',
+              flexDirection:'column',
+              gap:'8px',
+              color:'var(--ink-mid)',
+              fontFamily:"'Jost', sans-serif",
+              fontSize:'.65rem',
+              letterSpacing:'.15em',
+              textTransform:'uppercase',
+            }}>
+              <span style={{fontSize:'2rem'}}>🗺️</span>
+              <span>Foto in arrivo</span>
+            </span>
+            <span style={{
+              display:'block',
+              marginTop:'8px',
+              fontSize:'.55rem',
+              letterSpacing:'.15em',
+              textTransform:'uppercase',
+              color:'var(--orange)',
+              fontFamily:"'Jost', sans-serif",
+              textAlign:'center',
+              cursor:'pointer',
+            }} onClick={() => setOpen(false)}>
+              chiudi ✕
+            </span>
+          </span>
+        </span>
+      )}
+    </span>
+  );
+}
+
 function PanzerottiQuote() {
   const [open, setOpen] = useState(false);
   return (
@@ -477,7 +579,10 @@ function PageArrivarci({ onNav }) {
           <h1 className="arrivarci-title">Panzerottata</h1>
           <PanzerottiQuote />
           <p className="arrivarci-location">Casa della sposa</p>
-          <p className="arrivarci-address">Via Locorotondo 142<br />Cisternino, Brindisi</p>
+          <a className="arrivarci-address" href="https://google.com/maps/place/40°44'41.3%22N+17°25'00.4%22E/@40.7448217,17.4166455,53m/data=!3m1!1e3!4m4!3m3!8m2!3d40.744801!4d17.416768?entry=ttu&g_ep=EgoyMDI2MDMxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" style={{color:'var(--ink)', textDecoration:'underline', textUnderlineOffset:'3px'}}>Via Locorotondo 142<br />Cisternino, Brindisi</a>
+          <p style={{fontSize:'1rem', lineHeight:1.9, color:'var(--ink-mid)', margin:'20px 0 0'}}>
+            Ci sono due parcheggi. Per il primo ti basta seguire le indicazioni al link qui sopra su Via Locorotondo. È piccolo e con posti limitati. Il secondo parcheggio è più spazioso e capiente. Segui <a href="https://google.com/maps/place/40°44'43.2%22N+17°24'59.3%22E/@40.7452082,17.4163824,53m/data=!3m1!1e3!4m4!3m3!8m2!3d40.745342!4d17.416472?entry=ttu&g_ep=EgoyMDI2MDMxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" style={{color:'var(--orange)', textDecoration:'underline', textUnderlineOffset:'3px'}}>questo link</a> per arrivarci. Una volta parcheggiato ti basta scendere a piedi <ParcheggiStrada />.
+          </p>
           <a className="arrivarci-maps" href="https://maps.google.com/?q=Via+Locorotondo+142+Cisternino+Brindisi" target="_blank" rel="noreferrer">Apri in Google Maps →</a>
           <div className="arrivarci-map">
             <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=Via+Locorotondo+142,Cisternino,Brindisi" allowFullScreen loading="lazy" title="Mappa Panzerottata" />
