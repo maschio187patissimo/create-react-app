@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400;700;900&display=swap');
@@ -13,7 +13,6 @@ const styles = `
   .burger.open span:nth-child(1) { transform:translateY(9.5px) rotate(45deg); }
   .burger.open span:nth-child(2) { opacity:0; width:0; }
   .burger.open span:nth-child(3) { transform:translateY(-9.5px) rotate(-45deg); }
-
   .menu-overlay { position:fixed; inset:0; z-index:250; background:#FFFFFF; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding:0 10vw; pointer-events:none; opacity:0; transition:opacity .5s cubic-bezier(.77,0,.175,1); }
   .menu-overlay.open { opacity:1; pointer-events:all; }
   .menu-close { position:absolute; top:0; right:48px; height:64px; display:flex; align-items:center; background:none; border:none; cursor:pointer; font-size:2rem; color:var(--ink); transition:color .3s; padding:0; line-height:1; }
@@ -21,15 +20,15 @@ const styles = `
   .menu-nav { list-style:none; width:100%; }
   .menu-nav li { overflow:hidden; border-bottom:1px solid rgba(45,90,61,.15); padding:20px 0; }
   .menu-nav li:first-child { border-top:1px solid rgba(45,90,61,.15); }
-  .menu-nav a { font-family:'Jost',sans-serif; font-size:1.05rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); text-decoration:none; display:block; transform:translateY(30px); transition:transform .5s cubic-bezier(.77,0,.175,1), color .3s; cursor:pointer; }
-  .menu-overlay.open .menu-nav a { transform:translateY(0); }
-  .menu-nav li:nth-child(1) a { transition-delay:.05s; }
-  .menu-nav li:nth-child(2) a { transition-delay:.10s; }
-  .menu-nav li:nth-child(3) a { transition-delay:.15s; }
-  .menu-nav li:nth-child(4) a { transition-delay:.20s; }
-  .menu-nav li:nth-child(5) a { transition-delay:.25s; }
-  .menu-nav li:nth-child(6) a { transition-delay:.30s; }
-  .menu-nav a:hover { color:var(--orange); }
+  .menu-nav button.menu-link { font-family:'Jost',sans-serif; font-size:1.05rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); background:none; border:none; display:block; transform:translateY(30px); transition:transform .5s cubic-bezier(.77,0,.175,1), color .3s; cursor:pointer; width:100%; text-align:left; padding:0; }
+  .menu-overlay.open .menu-nav button.menu-link { transform:translateY(0); }
+  .menu-nav li:nth-child(1) button { transition-delay:.05s; }
+  .menu-nav li:nth-child(2) button { transition-delay:.10s; }
+  .menu-nav li:nth-child(3) button { transition-delay:.15s; }
+  .menu-nav li:nth-child(4) button { transition-delay:.20s; }
+  .menu-nav li:nth-child(5) button { transition-delay:.25s; }
+  .menu-nav li:nth-child(6) button { transition-delay:.30s; }
+  .menu-nav button.menu-link:hover { color:var(--orange); }
 
   .hero { height:100vh; display:flex; flex-direction:column; overflow:hidden; position:relative; }
   .stripes { display:flex; flex-direction:column; height:100%; }
@@ -68,7 +67,7 @@ const styles = `
   .tl-time { font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-mid); font-weight:300; }
   .tl-event { font-family:'EB Garamond',serif; font-size:clamp(1.8rem,3vw,2.8rem); font-weight:400; color:var(--ink); }
   .tl-desc { font-size:1rem; line-height:1.9; color:var(--ink-mid); }
-  .tl-link { display:inline-block; margin-top:6px; font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink); text-decoration:underline; text-underline-offset:3px; font-weight:500; cursor:pointer; background:none; border:none; }
+  .tl-link { display:inline-block; margin-top:6px; font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink); text-decoration:underline; text-underline-offset:3px; font-weight:500; cursor:pointer; background:none; border:none; padding:0; }
 
   .rsvp-section { padding:100px 48px; background:#FFFFFF; text-align:center; display:flex; flex-direction:column; align-items:center; gap:40px; }
   .rsvp-heading { font-family:'EB Garamond',serif; font-size:clamp(3rem,6vw,7rem); font-weight:400; line-height:1; color:var(--ink); }
@@ -104,7 +103,6 @@ const styles = `
   .rsvp-input:focus { border-bottom-color:var(--orange); }
   .rsvp-options { display:flex; flex-direction:column; gap:12px; }
   .rsvp-option { display:flex; align-items:center; gap:14px; cursor:pointer; }
-  .rsvp-option input[type="radio"] { display:none; }
   .rsvp-option-dot { width:18px; height:18px; border-radius:50%; border:1.5px solid rgba(26,20,16,.3); flex-shrink:0; transition:border-color .3s, background .3s; display:flex; align-items:center; justify-content:center; }
   .rsvp-option-dot.checked { border-color:var(--orange); background:var(--orange); }
   .rsvp-option-dot.checked::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; display:block; }
@@ -151,34 +149,44 @@ const styles = `
   }
 `;
 
-function useIntersection(ref, options) {
+function useIntersection(ref) {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) { setIsVisible(true); obs.disconnect(); }
-    }, options);
-    if (ref.current) obs.observe(ref.current);
+    }, { threshold: 0.05 });
+    obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [ref]);
   return isVisible;
 }
 
 function AnimatedEl({ className, delay = 0, children, tag: Tag = 'div' }) {
   const ref = useRef(null);
-  const visible = useIntersection(ref, { threshold: 0.05 });
+  const visible = useIntersection(ref);
   useEffect(() => {
     if (visible && ref.current) {
-      setTimeout(() => ref.current && ref.current.classList.add('visible'), delay);
+      const t = setTimeout(() => { if (ref.current) ref.current.classList.add('visible'); }, delay);
+      return () => clearTimeout(t);
     }
   }, [visible, delay]);
   return <Tag ref={ref} className={className}>{children}</Tag>;
 }
 
 function Nav({ onNav, menuOpen, setMenuOpen }) {
+  const goTo = useCallback((page) => { onNav(page); setMenuOpen(false); }, [onNav, setMenuOpen]);
+  const goToProgramma = useCallback(() => {
+    onNav('home');
+    setMenuOpen(false);
+    setTimeout(() => { const el = document.getElementById('programma'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100);
+  }, [onNav, setMenuOpen]);
+
   return (
     <>
       <nav className="nav">
-        <button className="nav-logo" onClick={() => onNav('home')}>S &amp; M</button>
+        <button className="nav-logo" onClick={() => goTo('home')}>S &amp; M</button>
         <button className={`burger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
           <span /><span /><span />
         </button>
@@ -186,19 +194,19 @@ function Nav({ onNav, menuOpen, setMenuOpen }) {
       <div className={`menu-overlay${menuOpen ? ' open' : ''}`}>
         <button className="menu-close" onClick={() => setMenuOpen(false)}>&#x2715;</button>
         <ul className="menu-nav">
-          <li><a onClick={() => onNav('storia')}>La nostra storia</a></li>
-          <li><a onClick={() => { onNav('home'); setTimeout(() => { const el = document.getElementById('programma'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 100); }}>Programma</a></li>
-          <li><a onClick={() => onNav('arrivarci')}>Come arrivarci</a></li>
-          <li><a onClick={() => onNav('rsvp')}>RSVP</a></li>
-          <li><a onClick={() => onNav('lista')}>Lista nozze</a></li>
-          <li><a onClick={() => onNav('faq')}>FAQ</a></li>
+          <li><button className="menu-link" onClick={() => goTo('storia')}>La nostra storia</button></li>
+          <li><button className="menu-link" onClick={goToProgramma}>Programma</button></li>
+          <li><button className="menu-link" onClick={() => goTo('arrivarci')}>Come arrivarci</button></li>
+          <li><button className="menu-link" onClick={() => goTo('rsvp')}>RSVP</button></li>
+          <li><button className="menu-link" onClick={() => goTo('lista')}>Lista nozze</button></li>
+          <li><button className="menu-link" onClick={() => goTo('faq')}>FAQ</button></li>
         </ul>
       </div>
     </>
   );
 }
 
-function Hero({ onNav }) {
+function Hero() {
   return (
     <section className="hero">
       <div className="stripes">
@@ -297,7 +305,7 @@ function AccordionItem({ label, children }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="acc-item">
-      <button className="acc-btn" onClick={() => setOpen(!open)}>
+      <button className="acc-btn" onClick={() => setOpen(o => !o)}>
         <span className="acc-label">{label}</span>
         <span className={`acc-arrow${open ? ' open' : ''}`}>↓</span>
       </button>
@@ -329,7 +337,7 @@ function Footer() {
 function PageHome({ onNav }) {
   return (
     <div>
-      <Hero onNav={onNav} />
+      <Hero />
       <Storia />
       <div className="wave">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none">
@@ -360,7 +368,7 @@ function PageArrivarci({ onNav }) {
           <p className="arrivarci-address">Via Locorotondo 142<br />Cisternino, Brindisi</p>
           <a className="arrivarci-maps" href="https://maps.google.com/?q=Via+Locorotondo+142+Cisternino+Brindisi" target="_blank" rel="noreferrer">Apri in Google Maps →</a>
           <div className="arrivarci-map">
-            <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=Via+Locorotondo+142,Cisternino,Brindisi" allowFullScreen loading="lazy" title="Panzerottata" />
+            <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=Via+Locorotondo+142,Cisternino,Brindisi" allowFullScreen loading="lazy" title="Mappa Panzerottata" />
           </div>
         </div>
       </div>
@@ -373,7 +381,7 @@ function PageArrivarci({ onNav }) {
           <p className="arrivarci-address">Contrada Coccaro s.n.<br />Fasano, Brindisi</p>
           <a className="arrivarci-maps" href="https://maps.google.com/?q=Contrada+Coccaro+Fasano+Brindisi" target="_blank" rel="noreferrer">Apri in Google Maps →</a>
           <div className="arrivarci-map">
-            <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=Contrada+Coccaro,Fasano,Brindisi" allowFullScreen loading="lazy" title="Matrimonio" />
+            <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=Contrada+Coccaro,Fasano,Brindisi" allowFullScreen loading="lazy" title="Mappa Matrimonio" />
           </div>
         </div>
       </div>
@@ -384,8 +392,9 @@ function PageArrivarci({ onNav }) {
   );
 }
 
-function PageRsvp({ onNav }) {
+function PageRsvp() {
   const [partecipa, setPartecipa] = useState('');
+  const [pernotto, setPernotto] = useState('');
   const [bambini, setBambini] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -419,10 +428,10 @@ function PageRsvp({ onNav }) {
               { val: 'entrambi', label: 'Sì, entrambi i giorni' },
               { val: 'no', label: 'No, mi dispiace' },
             ].map(opt => (
-              <label key={opt.val} className="rsvp-option" onClick={() => setPartecipa(opt.val)}>
+              <div key={opt.val} className="rsvp-option" onClick={() => setPartecipa(opt.val)} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && setPartecipa(opt.val)}>
                 <div className={`rsvp-option-dot${partecipa === opt.val ? ' checked' : ''}`} />
                 <span className="rsvp-option-label">{opt.label}</span>
-              </label>
+              </div>
             ))}
           </div>
         </div>
@@ -455,11 +464,10 @@ function PageRsvp({ onNav }) {
                 { val: 'si', label: 'Sì, mi farebbe piacere' },
                 { val: 'no', label: 'No, grazie' },
               ].map(opt => (
-                <label key={opt.val} className="rsvp-option">
-                  <input type="radio" name="pernotto" value={opt.val} style={{display:'none'}} />
-                  <div className="rsvp-option-dot" />
+                <div key={opt.val} className="rsvp-option" onClick={() => setPernotto(opt.val)} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && setPernotto(opt.val)}>
+                  <div className={`rsvp-option-dot${pernotto === opt.val ? ' checked' : ''}`} />
                   <span className="rsvp-option-label">{opt.label}</span>
-                </label>
+                </div>
               ))}
             </div>
           </div>
@@ -484,28 +492,27 @@ export default function App() {
   const [page, setPage] = useState('home');
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const onNav = (p) => {
+  const onNav = useCallback((p) => {
     setPage(p);
     setMenuOpen(false);
     window.scrollTo(0, 0);
-  };
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
   return (
     <>
       <style>{styles}</style>
       <Nav onNav={onNav} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-      <div style={{paddingTop: page === 'home' ? 0 : 0}}>
-        {page === 'home'     && <PageHome onNav={onNav} />}
-        {page === 'arrivarci'&& <PageArrivarci onNav={onNav} />}
-        {page === 'rsvp'     && <PageRsvp onNav={onNav} />}
-        {page === 'storia'   && <PagePlaceholder title="La nostra storia" onNav={onNav} />}
-        {page === 'lista'    && <PagePlaceholder title="Lista Nozze" onNav={onNav} />}
-        {page === 'faq'      && <PagePlaceholder title="FAQ" onNav={onNav} />}
-      </div>
+      {page === 'home'      && <PageHome onNav={onNav} />}
+      {page === 'arrivarci' && <PageArrivarci onNav={onNav} />}
+      {page === 'rsvp'      && <PageRsvp />}
+      {page === 'storia'    && <PagePlaceholder title="La nostra storia" onNav={onNav} />}
+      {page === 'lista'     && <PagePlaceholder title="Lista Nozze" onNav={onNav} />}
+      {page === 'faq'       && <PagePlaceholder title="FAQ" onNav={onNav} />}
     </>
   );
 }
